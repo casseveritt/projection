@@ -44,6 +44,12 @@ Vec3 make_Vec3( double x, double y, double z ) {
   return v;
 }
 
+Vec3 make_Vec3( const double * vec ) {
+  Vec3 v;
+  v.x = vec[0]; v.y = vec[1]; v.z = vec[2];
+  return v;
+}
+
 
 
 template <typename T> struct vector_traits { static const int num_elements = 0; };
@@ -86,6 +92,14 @@ template <typename T> T operator * ( const T & v, double f ) {
   Vec3 o = v;
   for(int n = 0; n < vector_traits<T>::num_elements; n++ ) {
     o.v[n] = v.v[n] * f;
+  }
+  return o;
+}
+
+template <typename T> T operator * ( const T & v, const T & u ) {
+  Vec3 o;
+  for(int n = 0; n < vector_traits<T>::num_elements; n++ ) {
+    o.v[n] = v.v[n] * u.v[n];
   }
   return o;
 }
