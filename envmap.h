@@ -158,7 +158,13 @@ Vec3 equirect_to_direction( const Vec2 & e ) {
 
 Vec2 direction_to_equirect( const Vec3 & v ) { 
   Vec2 p;
-  // implement me
+  double xz = sqrt( v.x * v.x + v.z * v.z );
+  p.x = atan2( v.x, v.z ) / ( 2.0 * PI );
+  p.y = ( atan2( v.y, xz ) / PI ) + 0.5;
+  if( p.x < 0.0 ) {
+    p.x += 1.0;
+  }
+  p.x = 1.0 - p.x;
   return p;
 }
 
@@ -248,6 +254,12 @@ Vec3 unpinched_cube_index_to_direction( CubeIndex ci ) {
   return cube_index_to_direction( ci );
 }
 
+Vec3 pinched_cube_index_to_direction( CubeIndex ci ) {
+  ci.x = unpinch( ci.x );
+  ci.y = unpinch( ci.y );
+  return cube_index_to_direction( ci );
+}
+
 Vec2 cube_index_to_baseball_cover_index( const CubeIndex & ci ) {
   Vec2 v;
   v.x = (ci.x + 1.0) / 6.0;
@@ -284,6 +296,12 @@ CubeIndex baseball_cover_index_to_cube_index( const Vec2 & bbci ) {
 Vec3 unpinched_baseball_cover_index_to_direction( const Vec2 & bbci ) {
   CubeIndex ci = baseball_cover_index_to_cube_index( bbci );
   Vec3 dir = unpinched_cube_index_to_direction( ci );
+  return dir;
+}
+
+Vec3 pinched_baseball_cover_index_to_direction( const Vec2 & bbci ) {
+  CubeIndex ci = baseball_cover_index_to_cube_index( bbci );
+  Vec3 dir = pinched_cube_index_to_direction( ci );
   return dir;
 }
 

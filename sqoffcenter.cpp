@@ -107,7 +107,7 @@ void resample_inv( Vec3 disp, double squash, unsigned char * src, int srcEdgeLen
 
 int main(int argc, char **argv) {
 
-  printf( "recenter projection\n" );
+  printf( "offset and squashed projection\n" );
 
   int w = 0;
   int h = 0;
@@ -117,24 +117,26 @@ int main(int argc, char **argv) {
 
   printf( "width = %d, height = %d, num_components = %d\n", w, h, comp );
 
-  int dw = w;
-  int dh = h;
-
-
   Vec3 disp;
   double lat, lon, r, squash;
+  int edgeLength = 512;
 
-  if( argc == 6 ) {
+  if( argc == 7 ) {
 	lat = atof( argv[2] );
   	lon = atof( argv[3] );
   	r = atof( argv[4] );
   	squash = atof( argv[5] );
+    edgeLength = atoi( argv[6] );
   } else { // pick Miami
   	lat = 25;
   	lon = -80.21;
-  	r = 0.5;
-  	squash = 0.5;
+  	r = 0.75;
+  	squash = 1.0;
+    edgeLength = 512;
   }
+
+  int dw = edgeLength * 3;
+  int dh = edgeLength * 2;
 
   disp.x = sin( deg2rad( lon ) ) * cos( deg2rad( -lat ) );
   disp.z = cos( deg2rad( lon ) ) * cos( deg2rad( -lat ) );
